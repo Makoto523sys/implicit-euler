@@ -15,15 +15,30 @@ class parameter{
 	double l = 1.0;
 	int nx;
 	double dx;
-	double dt;
+	double dt = 1e-3;
+	double time;
 	double alpha;
-	parameter(double _kappa, double _l, int _nx, double _dt): kappa(_kappa), l(_l), nx(_nx), dt(_dt){
-		dx = l / nx;
+	double tlim = 0.3;
+	explicit parameter(double _kappa, double _l, int _nx, double _dt, double _tlim): kappa(_kappa), l(_l), nx(_nx), dt(_dt), tlim(_tlim){
+		dx = l / (nx - 1);
 		alpha = kappa * dt / dx;
+		time = 0.0;
 	}
-	parameter(int _nx, double _dt): nx(_nx), dt(_dt){
+	explicit parameter(int _nx, double _dt, double _tlim): nx(_nx), dt(_dt), tlim(_tlim){
 		dx = l / nx;
 	        alpha = kappa * dt / dx;
+		time = 0.0;
 	}
+	explicit parameter(int _nx, double _dt): nx(_nx), dt(_dt){
+		dx = l / nx;
+	        alpha = kappa * dt / dx;
+		time = 0.0;
+	}
+	explicit parameter(int _nx): nx(_nx){
+		dx = l / nx;
+	        alpha = kappa * dt / dx;
+		time = 0.0;
+	}
+
 };
 #endif

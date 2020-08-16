@@ -2,6 +2,7 @@
 #define _TDMA_H_
 #include<vector>
 #include<iostream>
+
 /**
  * Thomas Algorithm
  * We think simultaneous equation like below
@@ -17,23 +18,23 @@
  * Step 3:Set xn = sn / gn
  * Step 4:For i from n - 1 to 1, set xi = (si - ci*xi+1)/gi
  * */ 
- inline std::vector<double> tdma(std::vector<double> a, std::vector<double> b, std::vector<double> c, std::vector<double> d);
 
-std::vector<double> tdma(std::vector<double> a, std::vector<double> b, std::vector<double> c, std::vector<double> d){
-	std::vector<double> g; g.resize(d.size());
-	std::vector<double> s; s.resize(d.size());
-	std::vector<double> x; x.resize(d.size());
-	g[0] = b[0]; s[0] = d[0];
-	for(int i = 1; i < d.size(); i++){
-	       	g[i] = b[i] - a[i] * c[i - 1] / g[i - 1];
-	       	s[i] = d[i] - a[i] * s[i - 1] / g[i - 1];
-		/*std::cout << "g[" << i << "] = " << g[i] << std::endl;
-		std::cout << "s[" << i << "] = " << s[i] << std::endl;*/
+inline std::vector<double> tdma(std::vector<double> a, std::vector<double> b, std::vector<double> c, std::vector<double> r);
+
+std::vector<double> tdma(std::vector<double> a, std::vector<double> b, std::vector<double> c, std::vector<double> r){
+	int n = a.size();
+	std::vector<double> ans(n);
+	std::vector<double> g(n); g[0] = b[0];
+	std::vector<double> s(n); s[0] = r[0];
+	ans[0] = s[0] / g[0];
+
+	for(int i = 1; i < n; i++){
+		g[i] = b[i] - a[i] * c[i - 1] / g[i - 1];
+		s[i] = r[i] - a[i] * s[i - 1] / g[i - 1];
+		ans[i] = s[i] / g[i];
 	}
-	x[d.size() - 1] = s[s.size() - 1] / g[g.size() - 1];
-	for(int i = d.size() - 1; i >= 0; i--){
-	       	x[i] = (s[i] - c[i] * x[i + 1]) / g[i];
-	}
-	return x;
+
+	for(int i = n - 2; i >= 0; i--) ans[i] = (s[i] - c[i] * ans[i + 1]) / g[i];
+	return ans;
 }
 #endif
